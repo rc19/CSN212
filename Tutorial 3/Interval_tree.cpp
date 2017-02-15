@@ -15,7 +15,7 @@ void Insert(TreeNode *z);
 void Transplant(TreeNode *u, TreeNode *v);
 void Delete(TreeNode *z);
 void DeleteFixUp(TreeNode *z);
-void TreeMin(TreeNode *z);
+TreeNode* TreeMin(TreeNode *z);
 
 void LeftRotate(TreeNode *x){
 	TreeNode *y;
@@ -248,7 +248,7 @@ void DeleteFixUp(TreeNode *x){
 	x->color = 'b';
 }
 
-void TreeMin(TreeNode *z){
+TreeNode* TreeMin(TreeNode *z){
 	while(z->left != nil) z->left;
 	return z;
 }
