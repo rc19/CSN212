@@ -8,8 +8,14 @@ struct TreeNode{
 };
 TreeNode* root, *nil;
 
+void LeftRotate(TreeNode *x);
+void RightRotate(TreeNode *y);
 void InsertFixUp(TreeNode *z);
-
+void Insert(TreeNode *z);
+void Transplant(TreeNode *u, TreeNode *v);
+void Delete(TreeNode *z);
+void DeleteFixUp(TreeNode *z);
+void TreeMin(TreeNode *z);
 
 void LeftRotate(TreeNode *x){
 	TreeNode *y;
@@ -91,14 +97,16 @@ void InsertFixUp(TreeNode *z){
 				z->parent->parent->color = 'r';
 				z = z->parent->parent;
 			}
-			else if(z == z->parent->right){
-				z = z->parent;
-				LeftRotate(z);
-			}
+			else{
+				if(z == z->parent->right){
+					z = z->parent;
+					LeftRotate(z);
+			    }
 			
-			z->parent->color = 'b';
-			z->parent->parent->color = 'r';
-			RightRotate(z->parent->parent);
+				z->parent->color = 'b';
+				z->parent->parent->color = 'r';
+				RightRotate(z->parent->parent);
+			}
 		}
 		else{
 			y = z->parent->parent->left;
@@ -109,20 +117,22 @@ void InsertFixUp(TreeNode *z){
 				z->parent->parent->color = 'r';
 				z = z->parent->parent;
 			}
-			else if(z == z->parent->left){
-				z = z->parent;
-				RightRotate(z);
-			}
+			else{
+				if(z == z->parent->left){
+					z = z->parent;
+					RightRotate(z);
+				}
 			
-			z->parent->color = 'b';
-			z->parent->parent->color = 'r';
-			LeftRotate(z->parent->parent);
+				z->parent->color = 'b';
+				z->parent->parent->color = 'r';
+				LeftRotate(z->parent->parent);
+			}
 		}
 	}
 	root->color = 'b';
 }
 
-/*void Transplant(TreeNode *u, *v){
+void Transplant(TreeNode *u, TreeNode *v){
 	
 	if(u->parent == nil) root = v;
 	else if(u == u->parent->left) u->parent->left = v;
@@ -130,7 +140,119 @@ void InsertFixUp(TreeNode *z){
 	
 	v->parent = u->parent;
 }
-*/
+
+void Delete(TreeNode *z){
+	TreeNode *y, *x;
+	y = z;
+	char y_org_color = y->color;
+	
+	if(z->left == nil){
+		x = z->right;
+		Transplant(z,z->right);
+	}
+	else if(z->right == nil){
+		x = z->left;
+		Transplant(z,z->left);
+	}
+	else{
+		y = TreeMin(z->right);
+		y_org_color = y->color;
+		x = y->right;
+		
+		if(y->parent == z) x->parent == y;
+		else{
+			Transplant(y,y->right);
+			y->right = z->right;
+			y->right->parent = y;
+		}
+		
+		Transplant(z,y);
+		y->left = z->left;
+		y->left->parent = y;
+		y->color = z->color;
+	}
+	
+	z = x->parent;
+	while(z != nil){
+		z->maxi = max(z->high, max(z->left->maxi, z->right->maxi));
+		z = z->parent;
+	}
+	if(y_org_color == 'b')  DeleteFixUp(x);
+}
+
+void DeleteFixUp(TreeNode *x){
+	TreeNode *w;
+	while(x != root && x->color == 'b'){
+		
+		if(x == x->parent->left){
+			w = x->parent->right;
+			
+			if(w->color == 'r'){
+				w->color = 'b';
+				x->parent->color = 'r';
+				LeftRotate(x->parent);
+				w = x->parent->right;
+			}
+			
+			if(w->left->color == 'b' && w->right->color == 'b'){
+				w->color = 'r';
+				x = x->parent;
+			}
+			else{
+				
+				if(w->right->color = 'b'){
+				w->left->color = 'b';
+				w->color = 'r';
+				RightRotate(w);
+				w = x->parent->right;
+			   }
+			   
+			   w->color = x->parent->color;
+			   x->parent->color = 'b';
+			   w->right->color = 'b';
+			   LeftRotate(x->parent);
+			   x = root;
+		    }
+		}
+		else{
+			w = x->parent->left;
+			
+			if(w->color == 'r'){
+				w->color = 'b';
+				x->parent->color = 'r';
+				RightRotate(x->parent);
+				w = x->parent->left;
+			}
+			
+			if(w->right->color == 'b' && w->left->color == 'b'){
+				w->color = 'r';
+				x = x->parent;
+			}
+			else{
+				
+				if(w->left->color = 'b'){
+				w->right->color = 'b';
+				w->color = 'r';
+				LeftRotate(w);
+				w = x->parent->left;
+			   }
+			   
+			   w->color = x->parent->color;
+			   x->parent->color = 'b';
+			   w->left->color = 'b';
+			   RightRotate(x->parent);
+			   x = root;
+		    }
+		}
+	}
+	x->color = 'b';
+}
+
+void TreeMin(TreeNode *z){
+	while(z->left != nil) z->left;
+	return z;
+}
+
 int main(){
 	
 }
