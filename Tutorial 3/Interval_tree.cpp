@@ -16,7 +16,7 @@ struct TreeNode{
 	int low,high,maxi;
 	char color;
 };
-TreeNode* root, *nil;
+TreeNode *root = new TreeNode, *nil = new TreeNode;
 
 void LeftRotate(TreeNode *x);
 void RightRotate(TreeNode *y);
@@ -297,6 +297,7 @@ int main(){
 			case 1: 
 				cout<<"Enter the interval to insert separated by space: ";
 				cin>>start>>end;
+				newnode = new TreeNode;
 				newnode->low = start;
 				newnode->high = newnode->maxi = end;
 				newnode->color = 'r';
@@ -319,7 +320,7 @@ int main(){
 				if(newnode == nil)
 					cout<<"No stored interval overlaps with the given interval."<<endl;
 				else
-					cout<<"The given interval overlaps with ["<<newnode->low<<", "<<newnode->high<<"].";
+					cout<<"The given interval overlaps with ["<<newnode->low<<", "<<newnode->high<<"]."<<endl;
  
 				break;
 			
