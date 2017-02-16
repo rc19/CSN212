@@ -1,3 +1,13 @@
+/*
+Assumptions: 1. Since 'low(or start)' value of the interval is being used as a key,
+			therefore it is assumed that all the intervals have distinct starting
+			points in time in order to have distinct set of keys.
+			
+			2. Deletion is to be carried out if the interval to be deleted exists in the tree.
+*/
+
+
+
 #include<bits/stdc++.h>
 using namespace std;
 
@@ -16,6 +26,8 @@ void Transplant(TreeNode *u, TreeNode *v);
 void Delete(TreeNode *z);
 void DeleteFixUp(TreeNode *z);
 TreeNode* TreeMin(TreeNode *z);
+TreeNode* IntervalSearch(int start, int end);
+TreeNode* TreeSearch(TreeNode *x, int start);
 
 void LeftRotate(TreeNode *x){
 	TreeNode *y;
@@ -59,7 +71,7 @@ void RightRotate(TreeNode *y){
 
 void Insert(TreeNode *z){
 	TreeNode *x, *y;
-	y  = nil;
+	y = nil;
 	x = root;
 	while(x != nil){
 		y = x;
@@ -253,6 +265,68 @@ TreeNode* TreeMin(TreeNode *z){
 	return z;
 }
 
+TreeNode* TreeSearch(TreeNode *x, int start){
+	if(x->low == start) return x;
+	if(start < x->low) return TreeSearch(x->left, start);
+	else return TreeSearch(x->right, start);
+}
+
+TreeNode* IntervalSearch(int start, int end){
+	TreeNode *x = root;
+	while(x != nil && (end < x->low || start > x->high)){
+		
+		if(x->left != nil && x->left->maxi >= start)  x = x->left;
+		else x = x->right;
+	}
+	return x;
+}
+
 int main(){
+	nil->parent = nil->right = nil->left = nil;
+	nil->color = 'b';
+	nil->low = nil->high = nil->maxi = INT_MIN;
 	
+	root = nil;
+	int choice, start, end;
+	TreeNode *newnode;
+	do{
+		cout<<"Press 0 to Exit, 1 to Insert, 2 to Delete and 3 to Search for an overlapping Interval: ";
+		cin>>choice;
+		switch(choice){
+			
+			case 1: 
+				cout<<"Enter the interval to insert separated by space: ";
+				cin>>start>>end;
+				newnode->low = start;
+				newnode->high = newnode->maxi = end;
+				newnode->color = 'r';
+				newnode->parent = newnode->left = newnode->right = nil;
+				Insert(newnode);
+				break;
+			
+			case 2:
+				cout<<"Enter the interval to delete separated by space: ";
+				cin>>start>>end;
+				newnode = TreeSearch(root, start);
+				Delete(newnode);
+				break;
+			
+			case 3:
+				cout<<"Enter the interval to search for overlaps separated by space: ";
+				cin>>start>>end;
+				newnode = IntervalSearch(start, end);
+				
+				if(newnode == nil)
+					cout<<"No stored interval overlaps with the given interval."<<endl;
+				else
+					cout<<"The given interval overlaps with ["<<newnode->low<<", "<<newnode->high<<"].";
+ 
+				break;
+			
+			default:
+				cout<<"Exiting from the program."<<endl;
+				break;
+		}
+		
+	}while(choice != 0);
 }
