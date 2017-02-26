@@ -10,7 +10,7 @@ https://community.topcoder.com/stat?c=problem_statement&pm=1889
 
 Important Note: Elements of the string "bad" can only be separated by comma whereas
 	            the values a,b,c,d of each element are separated by a single space.
-	            Therefore keep caution about the format of the input for getting
+	            Therefore, keep caution about the format of the input for getting
 	            the correct result.
 */
 
@@ -59,11 +59,40 @@ ll numWays(int w, int h, string bad){
 		
 		i++;
 	}
-	for(int i = 0;i <= w;i++){
-		for(int j = 0;j <= h;j++) cout<<edge[i][j]<<" ";
+	
+	dp[0][0] = 1;
+	for(int i = 0;i <= h;i++){
+		for(int j = 0;j <= w;j++){
+			
+			if(i == 0 || j == 0){
+				
+				if(i == 0 && j == 0) continue;
+				if(edge[i][j] != 0) dp[i][j] = 0;
+				else dp[i][j] = (i == 0)?dp[0][j-1]:dp[i-1][0];
+				
+			}
+			else{
+				
+				if(edge[i][j] == 0) dp[i][j] = dp[i-1][j] + dp[i][j-1];
+				else if(edge[i][j] == 1) dp[i][j] = dp[i-1][j];
+				else if(edge[i][j] == 2) dp[i][j] = dp[i][j-1];
+				
+			}
+			
+		}
+	}
+	
+	/*for(int i = 0;i <= h;i++){
+		for(int j = 0;j <= w;j++)  cout<<edge[i][j]<<" ";
 		cout<<endl;
 	}
-	return dp[w][h];
+	
+	for(int i = 0;i <= h;i++){
+		for(int j = 0;j <= w;j++)  cout<<dp[i][j]<<" ";
+		cout<<endl;
+	}*/
+	
+	return dp[h][w];
 }
 
 int main(){
