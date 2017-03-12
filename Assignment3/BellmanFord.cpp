@@ -103,8 +103,8 @@ void testInput(){
 }
 
 int main(){
-	userInput();
-	//testInput();
+	//userInput();
+	testInput();
 	
 	return 0;
 }
