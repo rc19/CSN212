@@ -6,7 +6,7 @@ Note: Vertices are numbered from 0 to n-1
 
 #include<bits/stdc++.h>
 using namespace std;
-#define NMAX 100
+#define NMAX 1000
 #define pb push_back
 
 struct edge{
@@ -59,7 +59,8 @@ void bellmanFord(int n, int m, int src){
 void userInput(){
 	adj.clear();
 	int n,m,u,v,w,src;
-	cout<<"Enter the number of vertices: ";
+	
+	/*cout<<"Enter the number of vertices: ";
 	cin>>n;
 	cout<<"Enter the number of edges: ";
 	cin>>m;
@@ -69,14 +70,29 @@ void userInput(){
 		addEdge(u,v,w);
 	}
 	cout<<"Enter source vertex: ";
-	cin>>src;
+	cin>>src;*/
+	
+	ifstream in;
+	in.open("1000_100000.txt");
+	in>>n>>m;
+	for(int i = 0;i < m;i++){
+		in>>u>>v>>w;
+		addEdge(u-1,v-1,w);
+	}
+	srand(time(NULL));
+	src = rand()%n;
+	/*cout<<n<<" "<<m<<endl;
+	for(int i = 0;i < m;i++){
+		cout<<adj[i].s<<" "<<adj[i].d<<" "<<adj[i].wt<<endl;
+	}*/
+	
 	bellmanFord(n,m,src);
 	
-	cout<<"Shortest distances from the src vertex to every vertex are: ";
+	cout<<"Source vertex: "<<src<<endl;
+	cout<<"Vertex \t Distance from src "<<endl;
 	for(int i = 0;i < n;i++){
-		cout<<dist[i]<<" ";
+		cout<<i<<" \t "<<dist[i]<<endl;
 	}
-	cout<<endl;
 }
 
 void testInput(){
@@ -95,20 +111,20 @@ void testInput(){
 	int src = 0;
 	bellmanFord(n,m,src);
 	
-	cout<<"Shortest distances from the src vertex to every vertex are: ";
+	cout<<"Source vertex: "<<src<<endl;
+	cout<<"Vertex \t Distance from src "<<endl;
 	for(int i = 0;i < n;i++){
-		cout<<dist[i]<<" ";
+		cout<<i<<" \t "<<dist[i]<<endl;
 	}
-	cout<<endl;
 }
 
 int main(){
 	clock_t startTime = clock();
 	
-	//userInput();
-	testInput();
+	userInput();
+	//testInput();
 	
 	double exeTime = double( clock() - startTime ) / (double)CLOCKS_PER_SEC;
-	cout<<endl<<exeTime<<endl;
+	cout<<endl<<exeTime<<" seconds."<<endl;
 	return 0;
 }
