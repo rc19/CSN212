@@ -103,8 +103,12 @@ void testInput(){
 }
 
 int main(){
+	clock_t startTime = clock();
+	
 	//userInput();
 	testInput();
 	
+	double exeTime = double( clock() - startTime ) / (double)CLOCKS_PER_SEC;
+	cout<<endl<<exeTime<<endl;
 	return 0;
 }
