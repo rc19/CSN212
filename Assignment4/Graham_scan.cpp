@@ -22,11 +22,19 @@ bool comp(pair<int,int> a, pair<int,int> b){
 	return (f == 1)?0:1;
 }
 
+pair<int,int> next2top(stack<pair<int,int> > &s){
+	pair<int,int> t = s.top();
+	s.pop();
+	pair<int,int> item = s.top();
+	s.push(t);
+	return item;
+}
+
 void convexHull(vector<pair<int,int> > p){
 	int n = p.size();
 	vector<pair<int,int> > res;
 	
-	//find the bottommost point
+	//Find the bottommost point
 	int id = 0;
 	for(int i = 1;i < n;i++){
 		if(p[i].y < p[id].y) id = i;
@@ -36,12 +44,29 @@ void convexHull(vector<pair<int,int> > p){
 	p0 = p[0];
 	
 	sort(p.begin()+1,p.end(),comp);
-	for(int i = 0; i < p.size();i++)
-		cout<<"("<<p[i].x<<","<<p[i].y<<")\t";
+	
+	//Remove collinear points
+	int j = 1;
+	for(int i = 1;i < n-1;i++){
+		if(order(p0,p[i],p[i+1]) != 0)  p[j++] = p[i];
+	}
+	p[j++] = p[n-1];
+	
+	if(j < 3) return;
+	
+	stack<pair<int,int> > s;
+	s.push(p[0]);s.push(p[1]);s.push(p[2]);
+	for(int i = 3;i < j;i++){
+		while(order(next2top(s),s.top(),p[i]) != 2) s.pop();
+		s.push(p[i]);
+	}
+	
 	//Result
-	cout<<"Points on the convex hull in anti-clockwise order are:\n";
-	for(int i = 0; i < res.size();i++)
-		cout<<"("<<res[i].x<<","<<res[i].y<<")\t";
+	cout<<"Points on the convex hull in clockwise order are:\n";
+	while(!s.empty()){
+		cout<<"("<<s.top().x<<","<<s.top().y<<")\t";
+		s.pop();
+	}		
 }
 
 void testInput(){
