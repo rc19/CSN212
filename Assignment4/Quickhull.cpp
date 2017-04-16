@@ -24,6 +24,7 @@ void qhull(vector<pair<int,int> > p, pair<int, int> a, pair<int, int> b, vector<
 	int n = p.size();
 	if(n == 0) return;
 	
+	//Get the point farthest from the line ab
 	double dist = 0;
 	int id;
 	for(int i = 0;i < n;i++){
@@ -34,6 +35,7 @@ void qhull(vector<pair<int,int> > p, pair<int, int> a, pair<int, int> b, vector<
 	}
 	res.pb(p[id]);
 	
+	//Divide the points into three sets(the points inside the triangle are not needed)
 	vector<pair<int, int> >p1, p2;
 	for(int i = 0;i < n;i++){
 		if(order(a, p[i], p[id]) == 2)  p1.pb(p[i]);
@@ -47,6 +49,7 @@ void convexHull(vector<pair<int,int> > p){
 	int n = p.size();
 	vector<pair<int, int> > res, p1, p2;
 	
+	//Get the leftmost and rightmost point
 	int id1 = 0, id2 = 0;
 	for(int i = 1;i < n;i++){
 		if(p[i].x < p[id1].x) id1 = i;
@@ -54,6 +57,7 @@ void convexHull(vector<pair<int,int> > p){
 	}
 	res.pb(p[id1]); res.pb(p[id2]);
 	
+	//Divide the points into two sets
 	int f;
 	for(int i = 0;i < n;i++){
 		f = order(p[id1], p[i], p[id2]);
@@ -65,7 +69,7 @@ void convexHull(vector<pair<int,int> > p){
 	qhull(p2,p[id2],p[id1],res);
 	
 	//Result
-	cout<<"Points on the convex hull in anti-clockwise order are:\n";
+	cout<<"Points comprising the convex hull are:\n";
 	for(int i = 0; i < res.size();i++)
 		cout<<"("<<res[i].x<<","<<res[i].y<<")\t";
 }
