@@ -62,11 +62,14 @@ void convexHull(vector<pair<int,int> > p){
 	}
 	
 	//Result
+	int count = 0;
 	cout<<"Points on the convex hull in clockwise order are:\n";
 	while(!s.empty()){
 		cout<<"("<<s.top().x<<","<<s.top().y<<")\t";
+		count++;
 		s.pop();
-	}		
+	}
+	cout<<endl<<"Minimum no. of points required to construct the hull are: "<<count<<endl;
 }
 
 void testInput(){
@@ -83,11 +86,34 @@ void testInput(){
 	convexHull(p);
 }
 
+void userInput(){
+	int n,x,y;
+	vector<pair<int,int> > p;
+	ifstream in;
+	in.open("100.txt");
+	in>>n;
+	for(int i = 0;i < n;i++){
+		in>>x>>y;
+		p.pb(mp(x,y));
+	}
+	
+	//Special Case: All points on convex hull
+	/*
+	cout<<"Enter input size: ";
+	cin>>n;
+	for(int i = 1;i < n;i++){
+		p.pb(mp(i,i));
+	}
+	p.pb(mp(0,1));
+	*/
+	convexHull(p);
+}
+
 int main(){
 	clock_t startTime = clock();
 	
-	//userInput();
-	testInput();
+	userInput();
+	//testInput();
 	
 	double exeTime = double( clock() - startTime ) / (double)CLOCKS_PER_SEC;
 	cout<<endl<<exeTime<<" seconds."<<endl;

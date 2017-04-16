@@ -36,6 +36,7 @@ void convexHull(vector<pair<int,int> > p){
 		a = b;
 	}while(a != id);
 	
+	//Result
 	cout<<"Points on the convex hull in anti-clockwise order are:\n";
 	for(int i = 0; i < res.size();i++)
 		cout<<"("<<res[i].x<<","<<res[i].y<<")\t";
@@ -47,10 +48,34 @@ void testInput(){
 	p.pb(mp(1,1));
 	p.pb(mp(2,2));
 	p.pb(mp(0,3));
-	p.pb(mp(2,1));
-	p.pb(mp(3,0));
+	p.pb(mp(1,2));
+	p.pb(mp(3,1));
 	p.pb(mp(0,0));
 	p.pb(mp(3,3));
+	p.pb(mp(4,4));
+	
+	convexHull(p);
+}
+
+void userInput(){
+	int n,x,y;
+	vector<pair<int,int> > p;
+	ifstream in;
+	in.open("100.txt");
+	in>>n;
+	for(int i = 0;i < n;i++){
+		in>>x>>y;
+		p.pb(mp(x,y));
+	}
+	
+	//Special Case: All points on convex hull
+	/*cout<<"Enter input size: ";
+	cin>>n;
+	for(int i = 1;i < n;i++){
+		p.pb(mp(i,i));
+	}
+	p.pb(mp(0,1));
+	*/
 	
 	convexHull(p);
 }
@@ -58,8 +83,8 @@ void testInput(){
 int main(){
 	clock_t startTime = clock();
 	
-	//userInput();
-	testInput();
+	userInput();
+	//testInput();
 	
 	double exeTime = double( clock() - startTime ) / (double)CLOCKS_PER_SEC;
 	cout<<endl<<exeTime<<" seconds."<<endl;
